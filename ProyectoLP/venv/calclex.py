@@ -33,7 +33,8 @@ t_COMA = 'r\,'
 t_EMPTY = r'\.empty[?]'
 t_SIZE = r'\.size|[==][0-9]*'
 t_INTER = r'\[a-zA-Z]*[=]["][a-zA-Z]*["]'
-t_SUBC = r'\[a-z]*\[[0-9][','][0-9]\]'
+t_SUBC1 = r'\[a-z]*\[[0-9][","][0-9]\]'
+
 
 def t_NUMBER(t):
     r'\d+'
