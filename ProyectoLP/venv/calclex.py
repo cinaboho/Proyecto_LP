@@ -30,22 +30,17 @@ t_OR = 'r\or'
 t_TRUE = 'r\true'
 t_TRUE = 'r\false'
 t_COMA = 'r\,'
-
 t_EMPTY = r'\.empty[?]'
 t_SIZE = r'\.size|[==][0-9]*'
 t_INTER = r'\[a-zA-Z]*[=]["][a-zA-Z]*["]'
-t_SUBC = r'\[a-z]*\[[0-9]..\-[0-9]\]'
+t_SUBC = r'\[a-z]*\[[0-9][','][0-9]\]'
 
-def t_SUBC(t):
-
-
-    # A regular expression rule with some action code
 def t_NUMBER(t):
     r'\d+'
     t.value = int(t.value)
     return t
 
-# Define a rule so we can track line numbers
+
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
