@@ -9,6 +9,11 @@ tokens = [
        'DIVIDE',
        'LPAREN',
        'RPAREN',
+       'EMPTY',
+       'SIZE',
+       'INTER',
+       'SUBC'
+
     ]
 
     # Regular expression rules for simple tokens
@@ -18,6 +23,21 @@ t_TIMES   = r'\*'
 t_DIVIDE  = r'/'
 t_LPAREN  = r'\('
 t_RPAREN  = r'\)'
+t_LCOR = 'r\['
+t_RCOR = 'r\]'
+t_AND = 'r\and'
+t_OR = 'r\or'
+t_TRUE = 'r\true'
+t_TRUE = 'r\false'
+t_COMA = 'r\,'
+
+t_EMPTY = r'\.empty[?]'
+t_SIZE = r'\.size|[==][0-9]*'
+t_INTER = r'\[a-zA-Z]*[=]["][a-zA-Z]*["]'
+t_SUBC = r'\[a-zA-Z]*+t_LOR[0-9]{2}[t_COMA][0-9]{2}+tRCOR'
+
+def t_SUBC(t):
+
 
     # A regular expression rule with some action code
 def t_NUMBER(t):
@@ -29,7 +49,7 @@ def t_NUMBER(t):
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
-def p_empty(p):
+
 
 # A string containing ignored characters (spaces and tabs)
 t_ignore  = ' \t'
