@@ -9,6 +9,17 @@ tokens = (
     'LPAREN',
     'RPAREN',
     'NUMBER',
+    'LCOR',
+    'RCOR',
+    'AND',
+    'OR',
+    'TRUE',
+    'FALSE',
+    'COMA',
+    'EMPTY',
+    'SIZE',
+    'INTER',
+    'SUBC'
 )
 
 t_ignore = ' \t'
@@ -19,6 +30,20 @@ t_TIMES   = r'\*'
 t_DIV     = r'/'
 t_LPAREN  = r'\('
 t_RPAREN  = r'\)'
+
+t_LCOR = 'r\['
+t_RCOR = 'r\]'
+t_AND = 'r\and'
+t_OR = 'r\or'
+t_TRUE = 'r\true'
+t_FALSE = 'r\false'
+t_COMA = 'r\,'
+
+
+t_EMPTY = r'\.empty[?]'
+t_SIZE = r'\.size|[==][0-9]*'
+t_INTER = r'\[a-zA-Z]*[=]["][a-zA-Z]*["]'
+t_SUBC = r'\[a-z]*\[[0-9]..\-[0-9]\]'
 
 def t_NUMBER( t ) :
     r'[0-9]+'
@@ -79,5 +104,5 @@ def p_error( p ):
 
 parser = yacc.yacc()
 
-res = parser.parse("-4*(-3-5)") # the input
+res = parser.parse("string[0,9]") # the input
 print(res)
