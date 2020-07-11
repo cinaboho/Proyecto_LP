@@ -7,7 +7,9 @@ tokens = [
 	'TIMES', # *
 	'DIVIDED', # /
 	'LPAREN', # (
+	'LBRA', # [
 	'RPAREN', # )
+	'RBRA', # ]
 	'SYMBOL', # variable names
 	'SYMBOL_UPPER', # variable names
 	'NUMBER',
@@ -22,6 +24,8 @@ tokens = [
 	'LEQT',
 	'FUNCTION',
 	'COMMENT',
+	'COMMA',
+	'DOT',
 ]
 
 t_PLUS = r'\+'
@@ -29,7 +33,9 @@ t_MINUS = r'-'
 t_TIMES = r'\*'
 t_DIVIDED = r'/'
 t_LPAREN = r'\('
+t_LBRA = r'\['
 t_RPAREN = r'\)'
+t_RBRA = r'\]'
 t_SYMBOL = r'[a-z]\w*'
 t_SYMBOL_UPPER = r'[A-Z]\w*'
 t_COMILLA_SIMPLE = r"\'"
@@ -41,6 +47,8 @@ t_LT = r'<'
 t_GEQT = r'>='
 t_LEQT = r'<=' 
 t_COMMENT = r'\#[\w\s\.]*' 
+t_COMMA = r'\,' 
+t_DOT = r'\.' 
 
 reserved_words = {
 	'alias': "ALIAS",
@@ -112,6 +120,9 @@ def test(code):
 test("def geeks")
 test("class GFG")
 test("# comentario bonito en rubby")
+test("arr = ['a', 'b', 'c']")
+test("if a > b")
+test("string.split(\"s\")")
 test("""\n
 def geeks\n  
 \n     
