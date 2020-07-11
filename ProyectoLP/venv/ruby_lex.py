@@ -1,9 +1,7 @@
 import ply.lex as lex
-
-# tokens
 tokens = [
 	'PLUS', # +
-	'MINUS', # - 
+	'MINUS', # -
 	'TIMES', # *
 	'DIVIDED', # /
 	'LPAREN', # (
@@ -45,10 +43,10 @@ t_EQUAL = r'={1}'
 t_GT = r'>'
 t_LT = r'<'
 t_GEQT = r'>='
-t_LEQT = r'<=' 
-t_COMMENT = r'\#[\w\s\.]*' 
-t_COMMA = r'\,' 
-t_DOT = r'\.' 
+t_LEQT = r'<='
+t_COMMENT = r'\#[\w\s\.]*'
+t_COMMA = r'\,'
+t_DOT = r'\.'
 
 reserved_words = {
 	'alias': "ALIAS",
@@ -66,7 +64,7 @@ reserved_words = {
 	'when': "WHEN",
 	'while': "WHILE",
 	'if': 'IF'
-} 
+}
 
 # reserved words
 functions = {
@@ -124,8 +122,8 @@ test("arr = ['a', 'b', 'c']")
 test("if a > b")
 test("string.split(\"s\")")
 test("""\n
-def geeks\n  
-\n     
+def geeks\n
+\n
     puts \"Hello Geeks\"\n
 end
 """)
