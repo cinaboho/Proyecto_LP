@@ -8,8 +8,10 @@ tokens = [
 	'DIVIDED', # /
 	'LPAREN', # (
 	'LBRA', # [
+	'LLLAVE', # {}
 	'RPAREN', # )
 	'RBRA', # ]
+	'RLLAVE', # }
 	'SYMBOL', # variable names
 	'SYMBOL_UPPER', # variable names
 	'NUMBER',
@@ -34,8 +36,10 @@ t_TIMES = r'\*'
 t_DIVIDED = r'/'
 t_LPAREN = r'\('
 t_LBRA = r'\['
+t_LLLAVE = r'\{'
 t_RPAREN = r'\)'
 t_RBRA = r'\]'
+t_RLLAVE = r'\}'
 t_SYMBOL = r'[a-z]\w*'
 t_SYMBOL_UPPER = r'[A-Z]\w*'
 t_COMILLA_SIMPLE = r"\'"
@@ -123,6 +127,8 @@ test("# comentario bonito en rubby")
 test("arr = ['a', 'b', 'c']")
 test("if a > b")
 test("string.split(\"s\")")
+test("a.join(\"blabla\")")
+test("puts \"The total is #{1+1}\"")
 test("""\n
 def geeks\n  
 \n     
