@@ -5,7 +5,19 @@
 
 1. Crear entorno virtual (virtual enviroment)
 ```bash
-$ 
+$ python3 -m venv .venv
+```
+
+2. Activar ambiente
+
+```bash
+$ source .venv/bin/activate
+```
+
+3. Instalar requerimientos
+
+``` bash
+$ pip install -r requeriments.txt
 ```
 
 # Salida
