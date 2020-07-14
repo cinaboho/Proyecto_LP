@@ -20,5 +20,7 @@ $ source .venv/bin/activate
 $ pip install -r requeriments.txt
 ```
 
+**IMPORTANTE:** Previo a realizar un commit, verifique que no se agreguen archivos del entorno de su IDE. Si es asi, agregue la excepcion en el archivo `.gitignore` para que no sean parte del commit.
+
 # Salida
  ![f](ProyectoLP/imagenes/Captura de Pantalla 2020-07-10 a la(s) 23.03.25.png) 
