@@ -2,7 +2,7 @@ import ply.lex as lex
 import re
 import codecs
 
-tokens =['TEXT','COMMIT', 'BEGIN','EXP','MULT','DIV','MODULO','PLUS','MINUS',
+tokens =['ID','TEXT','COMMIT', 'NUMBER','BEGIN','EXP','MULT','DIV','MODULO','PLUS','MINUS',
          'IGUALQ','DIFER','MENOR','MAYOR','MENORIGUAL','MAYORIGUAL','Y','AND',
          'O','OR','NO','IF','WHILE','LOOP','FOR','TIMES','LLLAVE',
          'RLLAVE','LCOR','RCOR','LPARENT','RPARENT','COMA','VAR','COMMA','DOT',
@@ -51,7 +51,7 @@ reservadas = {
 tokens = tokens+list(reservadas.values())
 t_ignore = '\t'
 t_TEXT = r"(\'[\w\s\.]*\'|\"[\w\s\.]*\")"
-t_COMMIT = r'\#[\w\s\.]*'
+#t_COMMIT = r'\#[\w\s\.]*'
 t_BEGIN = r'\begin'   #Revisar
 t_EXP= 'r\**'
 t_MULT= 'r\*'
@@ -66,9 +66,9 @@ t_MAYOR = r'>'
 t_MENORIGUAL = r'<='
 t_MAYORIGUAL = r'>='
 t_Y = r'\&&'
-t_AND = r'\and'    #revisar
+t_AND = r'and'    #revisar
 t_O = r'\||'
-t_OR = r'\or'      #revisar
+t_OR = r'or'      #revisar
 t_NO = r'\!'
 t_IF = r'if'       #revisar
 t_WHILE = r'while' #revisar
@@ -89,4 +89,55 @@ t_COMILLA_SIMPLE = r"\'"
 t_COMILLA_DOBLE = r'\"'
 t_IGUAL = r'='
 
+def t_COMMIT(t):
+    r'\#.*'
+    pass
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+def t_ID():
+    r'[a-zA-Z][a-zA-Z0-9]*'
+    if t.value.upper() in reservadas
+        t.value= t.value.upper()
+        t.type=t.value
+    return t
+ 
+def t_NUMBER(t):
+    r'\d+'
+    t.value=int(t.value)
+    return t
+def t_DECIMAL(t):
+	r'\d+\.\d+'
+	t.value = float(t.value)
+	return t
 
+def t_error(t):
+        print "caracter ilegal %s" %t.value[0]
+        t.lexer.sikip(1)
+
+
+lexer = lex.lex()
+
+
+def test(code):
+	lexer.input(code)
+	while True:
+		tok = lexer.token()
+		if not tok:
+			break
+		print(tok)
+
+test("def geeks")
+test("class GFG")
+test("# comentario bonito en rubby")
+test("arr = ['a', 'b', 'c']")
+test("if a > b")
+test("string.split(\"s\")")
+test("a.join(\"blabla\")")
+test("puts \"The total is #{1+1}\"")
+test("""\n
+def geeks\n
+\n
+    puts \"Hello Geeks\"\n
+end
+""")
