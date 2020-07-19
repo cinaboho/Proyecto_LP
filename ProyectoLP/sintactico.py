@@ -13,7 +13,7 @@ procedence = (
 			  ('left', 'LPARENT', 'RPARENT')
               )
 def p_program(p):
-    '''program=block'''
+	'''program=block'''
     print("program")
     #p[0] = program(p[1], "program")
 def p_consDecl(p):
