@@ -4,12 +4,13 @@ import codecs
 import re
 from lexico import tokens
 from sys import stdin
-procedence = (('right', 'ASIG'),
-              ('left','NO'),
-              ('left','MENOR','MENORIGUAL','MAYOR','MAYORIGUAL'),
+procedence = (
+			  ('right', 'ASIG'),
+			  ('left', 'NO'),
+			  ('left','MENOR','MENORIGUAL','MAYOR','MAYORIGUAL'),
               ('left','PLUS','MINUS'),
               ('left','NUMBER','DIV'),
-              ('left','LPARENT','RPARENT')
+			  ('left', 'LPARENT', 'RPARENT')
               )
 def p_program(p):
     '''program=block'''
