@@ -96,7 +96,7 @@ def t_ID(t):
 	r'([a-z\-0-9]+)'
 	if t.value in reserved_words:
 		t.type = reserved_words[t.value]
-	elif t.value in functions:
+	elif t.value in  functions:
 		t.type = 'FUNCTION'
 	else:
 		t.type = 'SYMBOL'
@@ -116,7 +116,7 @@ def test(code):
 	while True:
 		tok = lexer.token()
 		if not tok:
-			break
+			break 
 		print(tok)
 
 test("def geeks")
