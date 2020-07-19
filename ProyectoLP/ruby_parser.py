@@ -93,7 +93,6 @@ while True:
 def p_error(p):
     print("Error de sintaxis", p)
 
-
 def validate(expr):
     return parser.parse(expr)
 
