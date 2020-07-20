@@ -1,7 +1,6 @@
 import ply.lex as lex
-import re
-import codecs
-
+# resultado del analisis
+resultado_lexema = []
 tokens =['ID',
          'SYMBOL',
          'SYMBOL_UPPER',
@@ -18,6 +17,7 @@ tokens =['ID',
          'RPARENT',
          'COMA',
          'PUNTOYCOMA',
+         'DOSPUNTOS',
          'DOT',
          'COMILLA_SIMPLE',
          'COMILLA_DOBLE',
@@ -27,7 +27,7 @@ tokens =['ID',
          'MINUS',
          'PES',
          'MULT',
-         'EXP',
+         'SPLAT',
          'DIV',
          'MODULO',
          'LCOMILLABAJA',
@@ -55,6 +55,9 @@ tokens =['ID',
          'Y2',
          'O2',
          'CONDTERN',
+         'INC',
+         'VARNAME',
+         'GLOBAL',
          'NUMBER',
          'DECIMAL'
 
@@ -77,6 +80,7 @@ t_LPARENT = r'\('
 t_RPARENT = r'\)'
 t_COMA = r'\,'
 t_PUNTOYCOMA = r'\;'
+t_DOSPUNTOS = r'\:'
 t_DOT = r'\.'
 t_COMILLA_SIMPLE = r"\'"
 t_COMILLA_DOBLE = r'\"'
@@ -85,11 +89,11 @@ t_COND = r'\[?]'
 
 # Operacion Asignacion
 t_NO= r'\!'
-t_PLUS = r'\[+]'
+t_PLUS = r'\+'
 t_MINUS = r'-'
 t_PES = r"~"
-t_MULT = 'r\[*]'
-t_EXP = 'r\[*]{2}'
+t_MULT = r'\*'
+t_SPLAT = r'\*{2}'
 t_DIV = r'/'
 t_MODULO = r'%'
 t_LCOMILLABAJA = r'<<'
@@ -98,7 +102,7 @@ t_Y = r'&'
 t_O = r'\|'
 t_ACENTO = r'\^'
 t_IGUAL = r'={2}'
-t_COMP = r'={3}'
+#t_COMP = r'={3}'
 t_DIFER = r'!='
 t_COMPNAVE = r'<=>'
 t_MAYORIGUAL = r'>='
@@ -108,16 +112,19 @@ t_MENORIGUAL = r'<='
 t_ASIG = r'={1}'
 t_MODULOIGUAL = r'%='
 t_DIVIGUAL = r'/='
-t_MINUSIGUAL = '-='
-t_PLUSIGUAL = '\[+]='
-t_MULTIGUAL= '\[*]='
-t_MULT2IGUAL= '\[*]{2}='
+t_MINUSIGUAL = r'-='
+t_PLUSIGUAL = r'\+='
+t_MULTIGUAL= r'\[*]='
+t_MULT2IGUAL= r'\[*]{2}='
 t_DOT2 = r'\..'
 t_DOT3 = r'\.{3}'
 #and or not son reservadas
 t_Y2 = r'&&'
 t_O2 = r'\|{2}'
-t_CONDTERN = r'\[?]:'
+t_CONDTERN = r'\?\:'
+t_INC= r'\?'
+t_VARNAME= r'\@+[a-zA-Z_][a-zA-Z0-9_]*'
+t_GLOBAL= r'\$+[a-zA-Z_][a-zA-Z0-9_]*'
 
 
 reservadas = {
@@ -160,23 +167,20 @@ reservadas = {
     '_LINE_' : "_LINE_"
 }
 tokens = tokens+list(reservadas.values())
-
+def t_COMP(t):
+    r'={3}'
+    return t
 def t_newline(t):
     r'\n+'
-
     t.lexer.lineno += len(t.value)
 #def t_COMMIT(t):
     r'\#.*'
 #    pass
 
 def t_ID(t):
-    r'([a-z\-0-9]+)'
-    if t.value in reservadas:
-        t.type = reservadas[t.value]
-    else:
-        t.type = 'SYMBOL'
+    r'\[a-zA-Z_][a-zA-Z0-9_]*'
     return t
- 
+
 def t_NUMBER(t):
     r'\d+'
     t.value= int(t.value)
@@ -187,32 +191,34 @@ def t_DECIMAL(t):
 	return t
 
 def t_error(t):
-	print("Incorrect character '%s'" % t.value[0])
-	t.lexer.skip(1)
+    global resultado_lexema
+    estado = "** Token no valido en la Linea {:4} Valor {:16} Posicion {:4}".format(str(t.lineno), str(t.value),str(t.lexpos))
+    resultado_lexema.append(estado)
+    t.lexer.skip(1)
 
 
-lexer = lex.lex()
+# Prueba de ingreso
+def prueba(data):
+    global resultado_lexema
 
+    analizador = lex.lex()
+    analizador.input(data)
 
-def test(code):
-	lexer.input(code)
-	while True:
-		tok = lexer.token()
-		if not tok:
-			break
-		print(tok)
+    resultado_lexema.clear()
+    while True:
+        tok = analizador.token()
+        if not tok:
+            break
+        # print("lexema de "+tok.type+" valor "+tok.value+" linea "tok.lineno)
+        estado = "Linea {:4} Tipo {:16} Valor {:16} Posicion {:4}".format(str(tok.lineno),str(tok.type) ,str(tok.value), str(tok.lexpos) )
+        resultado_lexema.append(estado)
+    return resultado_lexema
 
-test("def geeks")
-test("class GFG")
-test("# comentario bonito en rubby")
-test("arr = ['a', 'b', 'c']")
-test("if a > b")
-test("string.split(\"s\")")
-test("a.join(\"blabla\")")
-test("puts \"The total is #{1+1}\"")
-test("""\n
-def geeks\n
-\n
-    puts \"Hello Geeks\"\n
-end
-""")
+ # instanciamos el analizador lexico
+analizador = lex.lex()
+
+if __name__ == '__main__':
+    while True:
+        data = input("ingrese: ")
+        prueba(data)
+        print(resultado_lexema)
