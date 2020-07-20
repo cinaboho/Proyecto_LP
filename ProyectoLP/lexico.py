@@ -34,7 +34,7 @@ tokens =['ID',
          'RCOMILLABAJA',
          'Y',
          'O',
-         'ACENTO',
+        # 'ACENTO',
          'IGUAL',
          'COMP',
          'DIFER',
@@ -93,14 +93,14 @@ t_PLUS = r'\+'
 t_MINUS = r'-'
 t_PES = r"~"
 t_MULT = r'\*'
-t_SPLAT = r'\*{2}'
+t_SPLAT = r'(\*{2}| \^)'
 t_DIV = r'/'
 t_MODULO = r'%'
 t_LCOMILLABAJA = r'<<'
 t_RCOMILLABAJA = r'>>'
 t_Y = r'&'
 t_O = r'\|'
-t_ACENTO = r'\^'
+#t_ACENTO = r'\^'
 t_IGUAL = r'={2}'
 #t_COMP = r'={3}'
 t_DIFER = r'!='

@@ -42,7 +42,7 @@ def p_statement_comp(p):
 
 def p_expression_function(p):
     """
-    expression_function : PUTS TEXT 
+    expression_function : PUTS TEXT
                         |  PUTS factor
                         |  DEF SYMBOL
     """
@@ -58,7 +58,7 @@ def p_expression_math(p):
     """
 
 def p_factor(p):
-    """ factor : NUMBER 
+    """ factor : NUMBER
                 | DECIMAL
                 | SYMBOL
     """
@@ -123,6 +123,3 @@ validate("if a > b and c <= d or true")  # correcto
 
 print("puts \"I cant guess the number\"")
 validate("puts \"I cant guess the number\"")  # correcto
-
-
-
