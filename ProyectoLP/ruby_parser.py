@@ -86,7 +86,7 @@ parser = yacc.yacc()
 '''
 while True:
     try:
-        s = input('parser > ')  
+        s = input('parser > ')
     except EOFError:
         break
     parser.parse(s)
