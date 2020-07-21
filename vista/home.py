@@ -5,7 +5,7 @@
 # Created by: PyQt5 UI code generator 5.8.2
 #
 # WARNING! All changes made in this file will be lost!
-
+import self as self
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_home(object):
@@ -932,6 +932,7 @@ class Ui_home(object):
         self.horizontalLayoutWidget_3 = QtWidgets.QWidget(self.centralWidget)
         self.horizontalLayoutWidget_3.setGeometry(QtCore.QRect(20, 90, 184, 40))
         self.horizontalLayoutWidget_3.setObjectName("horizontalLayoutWidget_3")
+
         self.archivo = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget_3)
         self.archivo.setContentsMargins(10, 11, 10, 11)
         self.archivo.setSpacing(6)
@@ -1121,8 +1122,8 @@ class Ui_home(object):
 
     def retranslateUi(self, home):
         _translate = QtCore.QCoreApplication.translate
-        home.setWindowTitle(_translate("home", "Analizador lexico y sintactico"))
-        self.label.setText(_translate("home", "Compilador"))
+        home.setWindowTitle(_translate("home", "Analizador lexico y sintactico PLY"))
+        self.label.setText(_translate("home", " "))
         self.label_2.setText(_translate("home", "Analisis Lexico"))
         self.tx_lexico.setHtml(_translate("home", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
@@ -1141,5 +1142,5 @@ class Ui_home(object):
         self.tx_ingreso.setPlaceholderText(_translate("home", "Ingrese el texto analizay o suba un archivo"))
         self.bt_lexico.setText(_translate("home", "Analizar Lexico"))
         self.bt_sintactico.setText(_translate("home", "Analisis Sintactico"))
-        self.bt_archivo.setText(_translate("home", "Subir Archivo"))
+        self.bt_archivo.setText(_translate("home", ""))
 

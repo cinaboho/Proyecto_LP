@@ -33,7 +33,6 @@ def p_expresion_operaciones(t):
                 |   expresion DIV expresion
                 |   expresion SPLAT expresion
                 |   expresion MODULO expresion
-
     '''
     if t[2] == '+':
         t[0] = t[1] + t[3]

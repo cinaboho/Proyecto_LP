@@ -1,4 +1,7 @@
 import ply.lex as lex
+# resultado del analisis
+resultado_lexema = []
+
 tokens = [
 	'PLUS', # +
 	'MINUS', # -
@@ -102,19 +105,31 @@ def t_ID(t):
 t_ignore = ' \t'
 
 def t_error(t):
-	print("Incorrect character '%s'" % t.value[0])
+	global resultado_lexema
+	estado = "** Token no valido en la Linea {:4} Valor {:16} Posicion {:4}".format(str(t.lineno), str(t.value),
+																					str(t.lexpos))
+	resultado_lexema.append(estado)
 	t.lexer.skip(1)
 
 lexer = lex.lex()
 
 
 def test(code):
-	lexer.input(code)
+	global resultado_lexema
+
+	analizador = lex.lex()
+	analizador.input(code)
+
+	resultado_lexema.clear()
 	while True:
-		tok = lexer.token()
+		tok = analizador.token()
 		if not tok:
 			break
-		print(tok)
+		# print("lexema de "+tok.type+" valor "+tok.value+" linea "tok.lineno)
+		estado = "Linea {:4} Tipo {:16} Valor {:16} Posicion {:4}".format(str(tok.lineno), str(tok.type),
+																		  str(tok.value), str(tok.lexpos))
+		resultado_lexema.append(estado)
+	return resultado_lexema
 
 test("def geeks")
 test("class GFG")

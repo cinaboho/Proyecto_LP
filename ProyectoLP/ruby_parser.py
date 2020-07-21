@@ -1,7 +1,9 @@
 import ply.yacc as yacc
-from ruby_lex import tokens
+from ProyectoLP.ruby_lex import tokens
 
-
+# resultado del analisis
+resultado_gramatica = []
+nombres = {}
 def p_body(p):
     """
     body : comment
@@ -90,11 +92,31 @@ while True:
     parser.parse(s)
 '''
 
-def p_error(p):
-    print("Error de sintaxis", p)
+def p_error(t):
+    global resultado_gramatica
+    if t:
+        resultado = "Error sintactico de tipo {} en el valor {}".format(str(t.type), str(t.value))
+        print(resultado)
+    else:
+        resultado = "Error sintactico {}".format(t)
+        print(resultado)
+    resultado_gramatica.append(resultado)
 
 def validate(expr):
-    return parser.parse(expr)
+
+    global resultado_gramatica
+    resultado_gramatica.clear()
+
+    for item in expr.splitlines():
+        if item:
+            gram = parser.parse(item)
+            if gram:
+                resultado_gramatica.append(str(gram))
+        else:
+            print("data vacia")
+
+    print("result: ", resultado_gramatica)
+    return resultado_gramatica
 
 
 print("#comentario")
@@ -123,3 +145,6 @@ validate("if a > b and c <= d or true")  # correcto
 
 print("puts \"I cant guess the number\"")
 validate("puts \"I cant guess the number\"")  # correcto
+
+print("o0111@")
+validate("o0111@")

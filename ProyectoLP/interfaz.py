@@ -5,8 +5,8 @@ from PyQt5.uic.properties import QtGui
 
 """ Importamos todas nuetras Ventana y funciones utiles"""
 from vista.home import  *
-from ProyectoLP.lexico import *
-from ProyectoLP.sintactico import *
+from ProyectoLP.ruby_lex import *
+from ProyectoLP.ruby_parser import *
 
 class Main(QMainWindow):
     """ Clase principal de nuestra app"""
@@ -26,7 +26,7 @@ class Main(QMainWindow):
         self.home.bt_limpiar.clicked.connect(self.ev_limpiar)
 
         #Desarrollandores
-        self.home.estado.showMessage("Desarrollando por Code Geass")
+        self.home.estado.showMessage(" ")
 
     def ev_lexico(self):
         '''
@@ -42,7 +42,7 @@ class Main(QMainWindow):
         datos = self.home.tx_ingreso.toPlainText().strip()
 
         # analizamos la lexemas de los datos ingresados
-        resultado_lexico = prueba(datos)
+        resultado_lexico = test(datos)
 
        # self.home.tx_lexico.setText("Analizando lexico")
         cadena= ''
@@ -64,7 +64,7 @@ class Main(QMainWindow):
         datos = self.home.tx_ingreso.toPlainText().strip()
 
         #analizamos la gramatica de los datos ingresados
-        resultado_sintactico = prueba_sintactica(datos)
+        resultado_sintactico = validate(datos)
         cadena = ''
 
         #Armanos la cadena a mostrar
@@ -105,7 +105,7 @@ def iniciar():
     # Instaciamos nuestro app por defecto esto no cambia
     app = QApplication(sys.argv)
 
-    # Instaciomos nuestro ventana
+    # Instaciamos nuestro ventana
     ventana = Main()
     # Mostramos nuestra app
     ventana.show()
