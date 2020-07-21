@@ -2,8 +2,11 @@ import ply.yacc as yacc
 import os
 import codecs
 import re
-from lexico import tokens
+from ProyectoLP.lexico import tokens
+from ProyectoLP.lexico import analizador
 from sys import stdin
+
+resultado_gramatica=[]
 procedence = (
 			  ('right', 'ASIG'),
 			  ('left', 'NO'),
@@ -11,171 +14,211 @@ procedence = (
               ('left','PLUS','MINUS'),
               ('left','NUMBER','DIV'),
 			  ('left', 'LPARENT', 'RPARENT')
-              )
-def p_program(p):
-	'''program=block'''
-    print("program")
-    #p[0] = program(p[1], "program")
-def p_consDecl(p):
-    '''program=block'''
-    print("Bloque")
-    #p[0]= consDecl(p[2])
-def p_constDeclEmpty(p):
-    '''constDecl =empty'''
-    print("constDecl")
-    #p[0] = Null()
-def p_constDEclEmpty(p):
-    '''constDecl= CONST consAssigmentList'''
-    #p[0]= NULL()
-    print("Nulo")
-def p_constAssignmentList1(p):
-	'''constAssignmentList : ID ASSIGN NUMBER'''
-	print ("constAssignmentList 1")
 
-def p_constAssignmentList2(p):
-	'''constAssignmentList : constAssignmentList COMMA ID ASSIGN NUMBER'''
-	print ("constAssignmentList 2")
+)
+nombres= {}
+def p_declaracion_asignar(t):
+    'declaracion : ID ASIG expresion'
+    nombres[t[1]] = t[3]
 
-def p_varDecl1(p):
-	'''varDecl : VAR identList SEMMICOLOM'''
-	print ("varDecl 1")
+def p_declaracion_expr(t):
+    'declaracion : expresion'
+    # print("Resultado: " + str(t[1]))
+    t[0] = t[1]
+def p_expresion_operaciones(t):
+    '''
+    expresion  :   expresion PLUS expresion
+                |   expresion MINUS expresion
+                |   expresion TIMES expresion
+                |   expresion DIV expresion
+                |   expresion SPLAT expresion
+                |   expresion MODULO expresion
 
-def p_varDeclEmpty(p):
-	'''varDecl : empty'''
-	print ("nulo")
+    '''
+    if t[2] == '+':
+        t[0] = t[1] + t[3]
+    elif t[2] == '-':
+        t[0] = t[1] - t[3]
+    elif t[2] == '*':
+        t[0] = t[1] * t[3]
+    elif t[2] == '/':
+        t[0] = t[1] / t[3]
+    elif t[2] == '%':
+        t[0] = t[1] % t[3]
 
-def p_identList1(p):
-	'''identList : ID'''
-	print ("identList 1")
+    elif t[2] == '**':
+        i = t[3]
+        t[0] = t[1]
+        while i > 1:
+            t[0] *= t[1]
+            i -= 1
 
-def p_identList2(p):
-	'''identList : identList COMMA ID'''
-	print ("identList 2")
 
-def p_procDecl1(p):
-	'''procDecl : procDecl PROCEDURE ID SEMMICOLOM block SEMMICOLOM'''
-	print ("procDecl 1")
 
-def p_procDeclEmpty(p):
-	'''procDecl : empty'''
-	print ("nulo")
+def p_expresion_grupo(t):
+    '''
+    expresion  : LPARENT expresion RPARENT
+                | LLLAVE expresion RLLAVE
+                | LCOR expresion RCOR
+    '''
+    t[0] = t[2]
+# sintactico de expresiones logicas
+def p_expresion_logicas(t):
+    '''
+    expresion   :  expresion MENOR expresion
+                |  expresion MAYOR expresion
+                |  expresion MENORIGUAL expresion
+                |   expresion MAYORIGUAL expresion
+                |   expresion IGUAL expresion
+                |   expresion DIFER expresion
+                |  LPARENT expresion RPARENT MENOR LPARENT expresion RPARENT
+                |  LPARENT expresion RPARENT MAYOR LPARENT expresion RPARENT
+                |  LPARENT expresion RPARENT MENORIGUAL LPARENT expresion RPARENT
+                |  LPARENT  expresion RPARENT MAYORIGUAL LPARENT expresion RPARENT
+                |  LPARENT  expresion RPARENT ASIG LPARENT expresion RPARENT
+                |  LPARENT  expresion RPARENT DIFER LPARENT expresion RPARENT
+    '''
+    if t[2] == "<": t[0] = t[1] < t[3]
+    elif t[2] == ">": t[0] = t[1] > t[3]
+    elif t[2] == "<=": t[0] = t[1] <= t[3]
+    elif t[2] == ">=": t[0] = t[1] >= t[3]
+    elif t[2] == "==": t[0] = t[1] is t[3]
+    elif t[2] == "!=": t[0] = t[1] != t[3]
+    elif t[3] == "<":
+        t[0] = t[2] < t[4]
+    elif t[2] == ">":
+        t[0] = t[2] > t[4]
+    elif t[3] == "<=":
+        t[0] = t[2] <= t[4]
+    elif t[3] == ">=":
+        t[0] = t[2] >= t[4]
+    elif t[3] == "==":
+        t[0] = t[2] is t[4]
+    elif t[3] == "!=":
+        t[0] = t[2] != t[4]
 
-def p_statement1(p):
-	'''statement : ID UPDATE expression'''
-	print ("statement 1")
+    # print('logica ',[x for x in t])
 
-def p_statement2(p):
-	'''statement : CALL ID'''
-	print ("statement 2")
+# gramatica de expresiones booleanadas
+def p_expresion_booleana(t):
+    '''
+    expresion   :   expresion AND expresion
+                |   expresion OR expresion
+                |   expresion NOT expresion
+                |  LPARENT expresion AND expresion RPARENT
+                |  LPARENT expresion OR expresion RPARENT
+                |  LPARENT expresion NOT expresion RPARENT
+    '''
+    if t[2] == "and":
+        t[0] = t[1] and t[3]
+    elif t[2] == "or":
+        t[0] = t[1] or t[3]
+    elif t[2] == "not":
+        t[0] =  t[1] is not t[3]
+    elif t[3] == "and":
+        t[0] = t[2] and t[4]
+    elif t[3] == "or":
+        t[0] = t[2] or t[4]
+    elif t[3] == "not":
+        t[0] =  t[2] is not t[4]
 
-def p_statement3(p):
-	'''statement : BEGIN statementList END'''
-	print ("statement 3")
+def p_expresion_booleana2(t):
+    '''
+    expresion   :   expresion Y2 expresion
+                |   expresion O2 expresion
+                |   expresion NO expresion
+                |  LPARENT expresion Y2 expresion RPARENT
+                |  LPARENT expresion O2 expresion RPARENT
+                |  LPARENT expresion NO expresion RPARENT
+    '''
+    if t[2] == "&&":
+        t[0] = t[1] and t[3]
+    elif t[2] == "||":
+        t[0] = t[1] or t[3]
+    elif t[2] == "!":
+        t[0] =  t[1] is not t[3]
+    elif t[3] == "&&":
+        t[0] = t[2] and t[4]
+    elif t[3] == "||":
+        t[0] = t[2] or t[4]
+    elif t[3] == "!":
+        t[0] =  t[2] is not t[4]
 
-def p_statement4(p):
-	'''statement : IF condition THEN statement'''
-	print ("statement 4")
 
-def p_statement5(p):
-	'''statement : WHILE condition DO statement'''
-	print ("statement 5")
 
-def p_statementEmpty(p):
-	'''statement : empty'''
-	print ("nulo")
+def p_expresion_numero(t):
+    'expresion : NUMBER'
+    t[0] = t[1]
+def p_expresion_decimal(t):
+    'expresion : DECIMAL'
+    t[0] = t[1]
 
-def p_statementList1(p):
-	'''statementList : statement'''
-	print ("statementList 1")
+def p_expresion_cadena(t):
+    '''
+    expresion : COMILLA_DOBLE expresion COMILLA_DOBLE
+    | COMILLA_SIMPLE expresion COMILLA_SIMPLE
+    '''
+    t[0] = t[2]
 
-def p_statementList2(p):
-	'''statementList : statementList SEMMICOLOM statement'''
-	print ("statementList 2")
+def p_expresion_nombre(t):
+    'expresion : ID'
+    try:
+        t[0] = nombres[t[1]]
+    except LookupError:
+        print("Nombre desconocido ", t[1])
+        t[0] = 0
 
-def p_condition1(p):
-	'''condition : ODD expression'''
-	print ("condition 1")
+def p_expresion_commit(t):
+	'expresion : COMMIT'
+	t[0]=t[1]
+def p_expresion_global(t):
+	'expresion : GLOBAL'
+	t[0]=t[1]
 
-def p_condition2(p):
-	'''condition : expression relation expression'''
-	print ("condition 2")
+def p_expresion_varname(t):
+	'expresion : VARNAME'
+	t[0]=t[1]
 
-def p_relation1(p):
-	'''relation : ASSIGN'''
-	print ("relation 1")
 
-def p_relation2(p):
-	'''relation : NE'''
-	print ("relation 2")
 
-def p_relation3(p):
-	'''relation : MENOR'''
-	print ("relation 3")
+def p_error(t):
+    global resultado_gramatica
+    if t:
+        resultado = "Error sintactico de tipo {} en el valor {}".format( str(t.type),str(t.value))
+        print(resultado)
+    else:
+        resultado = "Error sintactico {}".format(t)
+        print(resultado)
+    resultado_gramatica.append(resultado)
 
-def p_relation4(p):
-	'''relation : MAYOR'''
-	print ("relation 4")
 
-def p_relation5(p):
-	'''relation : MENORIGUAL'''
-	print ("relation 5")
 
-def p_relation6(p):
-	'''relation : MAYORIGUAL'''
-	print ("relation 6")
+# instanciamos el analizador sistactico
+parser = yacc.yacc()
 
-def p_expression1(p):
-	'''expression : term'''
-	print ("expresion 1")
+def prueba_sintactica(data):
+    global resultado_gramatica
+    resultado_gramatica.clear()
 
-def p_expression2(p):
-	'''expression : addingOperator term'''
-	print ("expresion 2")
+    for item in data.splitlines():
+        if item:
+            gram = parser.parse(item)
+            if gram:
+                resultado_gramatica.append(str(gram))
+        else: print("data vacia")
 
-def p_expression3(p):
-	'''expression : expression addingOperator term'''
-	print ("expresion 3")
+    print("result: ", resultado_gramatica)
+    return resultado_gramatica
 
-def p_addingOperator1(p):
-	'''addingOperator : PLUS'''
-	print ("addingOperator 1")
+if __name__ == '__main__':
+    while True:
+        try:
+            s = input(' ingresa dato >>> ')
+        except EOFError:
+            continue
+        if not s: continue
 
-def p_addingOperator2(p):
-	'''addingOperator : MINUS'''
-	print ("addingOperator 1")
+        # gram = parser.parse(s)
+        # print("Resultado ", gram)
 
-def p_term1(p):
-	'''term : factor'''
-	print ("term 1")
-
-def p_term2(p):
-	'''term : term multiplyingOperator factor'''
-	print ("term 1")
-
-def p_multiplyingOperator1(p):
-	'''multiplyingOperator : MULT'''
-	print ("multiplyingOperator 1")
-
-def p_multiplyingOperator2(p):
-	'''multiplyingOperator : DIV'''
-	print ("multiplyingOperator 2")
-
-def p_factor1(p):
-	'''factor : ID'''
-	print ("factor 1")
-
-def p_factor2(p):
-	'''factor : NUMBER'''
-	print ("factor 1")
-
-def p_factor3(p):
-	'''factor : LPARENT expression RPARENT'''
-	print ("factor 1")
-
-def p_empty(p):
-	'''empty :'''
-	pass
-
-def p_error(p):
-	print ("Error de sintaxis ", p)
-	#print "Error en la linea "+str(p.lineno)
+        prueba_sintactica(s)
