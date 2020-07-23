@@ -14,7 +14,6 @@ tokens = [
 	'RBRA', # ]
 	'RLLAVE', # }
 	'SYMBOL', # variable names
-	'SYMBOL_UPPER', # variable names
 	'NUMBER',
 	'TEXT',
 	'DECIMAL',
@@ -29,6 +28,8 @@ tokens = [
 	'COMMA',
 	'DDOT',
 	'DOT',
+	'DOSPUNTOS',
+	'ATTRIBUTE',
 ]
 
 t_PLUS = r'\+'
@@ -41,8 +42,7 @@ t_LLLAVE = r'\{'
 t_RPAREN = r'\)'
 t_RBRA = r'\]'
 t_RLLAVE = r'\}'
-t_SYMBOL = r'\${0,1}[a-z]\w*'
-t_SYMBOL_UPPER = r'\${0,1}[A-Z]\w*'
+t_SYMBOL = r'^\${0,1}(a-z|A-Z)(a-z|A-Z|0-9|\_)*'
 t_TEXT = r"(\'[\w\s\.]*\'|\"[\w\s\.]*\")"
 t_EQUAL = r'={2}'
 t_ASIGN = r'={1}'
@@ -54,6 +54,8 @@ t_COMMENT = r'\#[\w\s\.]*'
 t_COMMA = r'\,'
 t_DDOT = r'\.\.'
 t_DOT = r'\.'
+t_DOSPUNTOS = r'\:'
+t_ATTRIBUTE = r'\:[a-z]+'
 
 reserved_words = {
 	'alias': "ALIAS",
@@ -75,7 +77,11 @@ reserved_words = {
 	'else': 'ELSE',
 	'puts': "PUTS",
 	'def': "DEF",
-	'unless': "UNLESS"
+	'unless': "UNLESS",
+	'last': "LAST",
+	'first': "FIRST",
+	'new': "NEW",
+	'struct': "STRUCT"
 }
 
 tokens = tokens +  list(reserved_words.values())
@@ -123,6 +129,7 @@ def test(code):
 	resultado_lexema.clear()
 	while True:
 		tok = analizador.token()
+		print(tok)
 		if not tok:
 			break
 		# print("lexema de "+tok.type+" valor "+tok.value+" linea "tok.lineno)
@@ -145,3 +152,4 @@ def geeks\n
     puts \"Hello Geeks\"\n
 end
 """)
+test("Person = Struct.new(:name, :age)")

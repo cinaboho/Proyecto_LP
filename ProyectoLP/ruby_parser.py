@@ -1,5 +1,5 @@
 import ply.yacc as yacc
-from ProyectoLP.ruby_lex import tokens
+from ruby_lex import tokens
 
 # resultado del analisis
 resultado_gramatica = []
@@ -12,6 +12,9 @@ def p_body(p):
          | expression_assign
          | expression_when
          | expression_math
+         | expression_slicing_indexing
+         | expression_create_object
+         | expression_asign_value_object
     """
 
 
@@ -45,24 +48,55 @@ def p_statement_comp(p):
 def p_expression_function(p):
     """
     expression_function : PUTS TEXT
-                        |  PUTS factor
-                        |  DEF SYMBOL
+                        | PUTS factor
+                        | DEF SYMBOL
+                        | PUTS SYMBOL
     """
 
 def p_expression_assign(p):
     """
-    expression_assign : factor ASIGN factor
+    expression_assign : SYMBOL ASIGN factor
+                      | SYMBOL ASIGN LBRA factor_list RBRA
+                      | SYMBOL ASIGN LPAREN factor_list RPAREN
     """
 
 def p_expression_math(p):
     """
     expression_math : factor operator_math factor
+                    | expression_math operator_math factor
+    """
+
+def p_expression_slicing_indexing(p):
+    """
+    expression_slicing_indexing : SYMBOL LBRA NUMBER RBRA
+                       | SYMBOL LBRA NUMBER COMMA NUMBER RBRA
+                       | SYMBOL DOT FIRST
+                       | SYMBOL DOT LAST
+    """
+
+def p_expression_create_object(p):
+    """
+    expression_create_object : SYMBOL ASIGN SYMBOL DOT NEW
+                             | SYMBOL ASIGN STRUCT DOT NEW LPAREN factor_list RPAREN
+    """
+
+def p_expression_asign_value_object(p):
+    """
+    expression_asign_value_object : SYMBOL DOT SYMBOL ASIGN factor
+    """
+
+def p_factor_list(p):
+    """
+    factor_list : factor COMMA factor
+                | factor_list COMMA factor
     """
 
 def p_factor(p):
     """ factor : NUMBER
-                | DECIMAL
-                | SYMBOL
+               | DECIMAL
+               | SYMBOL
+               | TEXT
+               | ATTRIBUTE
     """
 
 def p_factor_boolean(p):
@@ -81,70 +115,60 @@ def p_comment(p):
     """ comment : COMMENT
     """
 
+def p_error(p):
+    if p:
+        print(p)
+        print("Error sintactico")
+    else:
+        print("Error lexico")
+
 parser = yacc.yacc()
 
-'''
-while True:
-    try:
-        s = input('parser > ')
-    except EOFError:
-        break
-    parser.parse(s)
-'''
-
-def p_error(t):
-    global resultado_gramatica
-    if t:
-        resultado = "Error sintactico de tipo {} en el valor {}".format(str(t.type), str(t.value))
-        print(resultado)
-    else:
-        resultado = "Error sintactico {}".format(t)
-        print(resultado)
-    resultado_gramatica.append(resultado)
-
 def validate(expr):
-
-    global resultado_gramatica
-    resultado_gramatica.clear()
-
-    for item in expr.splitlines():
-        if item:
-            gram = parser.parse(item)
-            if gram:
-                resultado_gramatica.append(str(gram))
-        else:
-            print("data vacia")
-
-    print("result: ", resultado_gramatica)
-    return resultado_gramatica
+    print(expr)
+    return parser.parse(expr)
 
 
-print("#comentario")
 validate("#comentario")  # correcto
 
-print("x = 1")
 validate("x = 1")  # correcto
 
-print("$x = 1")
 validate("$x = 1")  # correcto
 
-print("2 + 1 - f")
-validate("2 + 1 - f")  # correcto
+validate("2 + 1 * f")  # correcto
 
-print("unless x == c")
 validate("unless x == c")  # correcto
 
-print("when 0 .. 2")
 validate("when 0 .. 2")  # correcto
 
-print("elsif a > b and c <= d or true")
 validate("elsif a > b and c <= d or true")  # correcto
 
-print("if a > b and c <= d or true")
 validate("if a > b and c <= d or true")  # correcto
 
-print("puts \"I cant guess the number\"")
 validate("puts \"I cant guess the number\"")  # correcto
 
-print("o0111@")
 validate("o0111@")
+
+validate("a = [uno, dos, tres]")
+
+validate("arr = ['a', 'b', 'c']")
+
+validate("tupla = ('a', 'b', 'c')")
+
+validate("array[1]")
+
+validate("array[0,5]")
+
+validate("array.first")
+
+validate("array.last")
+
+validate("person = struct.new(:name, :age)")
+
+validate("person1 = person.new")
+
+validate("person1.name = \"Nombre\"")
+
+validate("person1.age = 70")
+
+validate("person1.pension = 300")

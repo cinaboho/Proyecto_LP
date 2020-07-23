@@ -2,8 +2,8 @@ import ply.yacc as yacc
 import os
 import codecs
 import re
-from ProyectoLP.lexico import tokens
-from ProyectoLP.lexico import analizador
+from lexico import tokens
+from lexico import analizador
 from sys import stdin
 
 resultado_gramatica=[]
