@@ -103,7 +103,6 @@ def p_error(t):
     resultado_gramatica.append(resultado)
 
 def validate(expr):
-
     global resultado_gramatica
     resultado_gramatica.clear()
 
