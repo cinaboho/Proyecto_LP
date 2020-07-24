@@ -4,7 +4,7 @@ from ruby_lex import tokens
 # resultado del analisis
 resultado_gramatica = []
 nombres = {}
-f = open('res', 'w')
+f = open('res_sin', 'w')
 f.close
 
 def p_body(p):
@@ -20,7 +20,7 @@ def p_body(p):
          | expression_asign_value_object
     """
     print("CORRECTO!")
-    f = open('res', 'w')
+    f = open('res_sin', 'w')
     f.write("Correcto\n")
     f.close()
 
@@ -123,14 +123,14 @@ def p_comment(p):
     """
 
 def p_error(p):
-    f = open('res', 'w')
+    f = open('res_sin', 'w')
     if p:
         print(p)
         print("Error sintactico")
         f.write("Error sintactico")
     else:
         print("Error lexico")
-        f.write("Error sintactico")
+        f.write("Error lexico")
     f.close()
 
 parser = yacc.yacc()

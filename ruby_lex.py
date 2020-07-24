@@ -42,7 +42,7 @@ t_LLLAVE = r'\{'
 t_RPAREN = r'\)'
 t_RBRA = r'\]'
 t_RLLAVE = r'\}'
-t_SYMBOL = r'^\${0,1}(a-z|A-Z)(a-z|A-Z|0-9|\_)*'
+t_SYMBOL = r'^[$]{0,1}[a-z|A-Z][a-zA-Z0-9]*'
 t_TEXT = r"(\'[\w\s\.]*\'|\"[\w\s\.]*\")"
 t_EQUAL = r'={2}'
 t_ASIGN = r'={1}'
@@ -153,3 +153,4 @@ def geeks\n
 end
 """)
 test("Person = Struct.new(:name, :age)")
+test("$x=1")
