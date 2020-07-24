@@ -21,6 +21,7 @@ tokens = [
  	'ASIGN',
 	'GT',
 	'LT',
+	'ARROW',
 	'GEQT',
 	'LEQT',
 	'FUNCTION',
@@ -48,6 +49,7 @@ t_EQUAL = r'={2}'
 t_ASIGN = r'={1}'
 t_GT = r'>'
 t_LT = r'<'
+t_ARROW = r'=>'
 t_GEQT = r'>='
 t_LEQT = r'<='
 t_COMMENT = r'\#[\w\s\.]*'
@@ -154,3 +156,17 @@ end
 """)
 test("Person = Struct.new(:name, :age)")
 test("$x=1")
+test("""\n
+class Mamifero
+	def respira
+		puts \"inhala y exhala\"
+	end
+end
+class Gato<Mamifero
+	def habla
+		puts \"Meow\"
+	end
+end
+""")
+
+test("{ \"one\" => \"eins\", \"two\" => \"zwei\", \"three\" => \"drei\" }")

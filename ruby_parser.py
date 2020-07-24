@@ -18,12 +18,26 @@ def p_body(p):
          | expression_slicing_indexing
          | expression_create_object
          | expression_asign_value_object
+         | expression_define_function
+         | expression_define_class
+         | expression_define_dict
     """
     print("CORRECTO!")
     f = open('res_sin', 'w')
     f.write("Correcto\n")
     f.close()
 
+def p_expression_define_class(p):
+    """
+    expression_define_class : CLASS SYMBOL expression_define_function END
+                            | CLASS SYMBOL LT SYMBOL expression_define_function END
+    """
+
+
+def p_expression_define_function(p):
+    """
+    expression_define_function : DEF SYMBOL PUTS TEXT END
+    """
 
 def p_statement_if_unless(p):
     """ statement_if_unless : IF expression_comp
@@ -90,6 +104,23 @@ def p_expression_create_object(p):
 def p_expression_asign_value_object(p):
     """
     expression_asign_value_object : SYMBOL DOT SYMBOL ASIGN factor
+    """
+
+def p_expression_define_dict(p):
+    """
+    expression_define_dict : LLLAVE key_value_list RLLAVE
+    """
+
+def p_key_value_list(p):
+    """
+    key_value_list : factor_key_value COMMA factor_key_value
+                   | key_value_list COMMA factor_key_value
+    """
+
+
+def p_factor_key_value(p):
+    """
+    factor_key_value : factor ASIGN GT factor
     """
 
 def p_factor_list(p):
@@ -183,3 +214,27 @@ validate("person1.name = \"Nombre\"")
 validate("person1.age = 70")
 
 validate("person1.pension = 300")
+
+validate("""
+def habla
+		puts \"Meow\"
+	end
+""")
+
+validate("""
+class Mamifero
+	def respira
+		puts \"inhala y exhala\"
+	end
+end
+""")
+
+validate("""
+class Gato < Mamifero
+	def habla
+		puts \"Meow\"
+	end
+end
+""")
+
+validate("{\"key\" => \"value\", \"key\" => \"value\", \"key\" => \"value\"}")

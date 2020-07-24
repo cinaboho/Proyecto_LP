@@ -46,6 +46,9 @@ class App(Frame):
         btnsyntax = Button(frame3, text="Analisis Sintactico", width=12, command=self.validate_syntax)
         btnsyntax.pack(side=LEFT, anchor=N, padx=12, pady=5)
 
+        btnclear = Button(frame3, text="Limpiar", width=8, command=self.clear)
+        btnclear.pack(side=LEFT, anchor=N, padx=20, pady=5)
+
         frame4 = Frame(self)
         frame4.pack(fill=X)
 
@@ -64,6 +67,11 @@ class App(Frame):
     def errorMsg(self,msg):
         if msg == 'error':
             tkinter.messagebox.showerror('Error!', 'Coloque una expresion')
+
+    def clear(self):
+        self.expr.delete('1.0', END)
+        self.tbox.delete('1.0', END)
+        self.tbox2.delete('1.0', END)
 
     def validate_syntax(self):
         self.tbox2.delete('1.0', END)
